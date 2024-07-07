@@ -17,7 +17,7 @@ from .DepthAnythingV2.depth_anything_v2.dpt import DepthAnythingV2
 
 def predict_depthany_v2(image,x,y):
     model = DepthAnythingV2(encoder='vitl', features=256, out_channels=[256, 512, 1024, 1024])
-    model.load_state_dict(torch.load('checkpoints/depth_anything_v2_vitl.pth', map_location='cpu'))
+    model.load_state_dict(torch.load('core/calculate_size/checkpoints/depth_anything_v2_vitl.pth', map_location='cpu'))
     model.eval()
     depth = model.infer_image(image) # HxW raw depth map
     depth_value = depth[y, x]
