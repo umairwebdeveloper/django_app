@@ -97,7 +97,7 @@ class CalculateSizeView(APIView):
             average_width_cm =- 1000
             height_count = 0
             width_count = 0
-            sample_limit = 5
+            sample_limit = 1
             lengths_cm =[]
             width_cm = []
             while cap.isOpened():
