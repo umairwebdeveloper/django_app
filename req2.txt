@@ -86,7 +86,6 @@ pickleshare
 pillow==10.2.0
 platformdirs
 plotly
-point-e
 prompt-toolkit
 psutil
 pure-eval
