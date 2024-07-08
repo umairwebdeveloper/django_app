@@ -85,7 +85,7 @@ parso
 pickleshare
 pillow==10.2.0
 platformdirs
-plotly==5.20.0
+plotly
 point-e
 prompt-toolkit
 psutil
