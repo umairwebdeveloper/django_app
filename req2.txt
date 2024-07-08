@@ -12,7 +12,7 @@ blinker==1.7.0
 certifi==2024.2.2
 charset-normalizer==3.3.2
 click==8.1.7
-clip @ git+https://github.com/openai/CLIP.git@a1d071733d7111c9c014f024669f959182114e33
+clip
 colorama
 comm
 ConfigArgParse==1.7
@@ -86,7 +86,7 @@ pickleshare
 pillow==10.2.0
 platformdirs
 plotly==5.20.0
-point-e @ git+https://github.com/openai/point-e.git@fc8a607c08a3ea804cc82bf1ef8628f88a3a5d2f
+point-e
 prompt-toolkit
 psutil
 pure-eval
