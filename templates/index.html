@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Foot Measurement</title>
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		/>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<style>
+			#loading {
+				display: none;
+			}
+			.measurement-list {
+				list-style-type: none;
+				padding: 0;
+			}
+			.measurement-list li {
+				background: #f8f9fa;
+				margin-bottom: 5px;
+				padding: 10px;
+				border: 1px solid #dee2e6;
+				border-radius: 5px;
+			}
+			#imagePreview {
+				max-width: 100%;
+				height: auto;
+				margin-top: 10px;
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1 class="my-3 text-center">Foot Measurement</h1>
+			<div class="card my-3">
+				<div class="card-header">
+					<h3 class="card-title">Upload Image</h3>
+				</div>
+				<div class="card-body">
+					<form id="uploadForm" enctype="multipart/form-data">
+						<div class="form-group">
+							<input
+								type="file"
+								class="form-control-file"
+								id="image"
+								name="image"
+								required
+								accept="image/*"
+							/>
+						</div>
+						<img
+							id="imagePreview"
+							src="#"
+							alt="Image Preview"
+							class="img-fluid rounded mb-4"
+							width="200"
+						/>
+						<button type="submit" class="btn btn-primary btn-block">
+							Upload
+						</button>
+					</form>
+					<div id="loading" class="mt-3 text-center">
+						<div class="spinner-border text-primary" role="status">
+							<span class="sr-only">Loading...</span>
+						</div>
+						<p>Processing...</p>
+					</div>
+					<div id="result" class="mt-3"></div>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(document).ready(function () {
+				$("#image").change(function () {
+					readURL(this);
+				});
+
+				$("#uploadForm").on("submit", function (e) {
+					e.preventDefault();
+					var formData = new FormData(this);
+					$("#loading").show();
+					$.ajax({
+						url: "",
+						type: "POST",
+						data: formData,
+						processData: false,
+						contentType: false,
+						success: function (data) {
+							$("#loading").hide();
+							if (data.length_foot) {
+								$("#result").html(`
+                                <div class="alert alert-success">
+                                    <strong>Message:</strong> ${data.Message}
+                                </div>
+                                <h5>Left Foot Measurements:</h5>
+                                <ul class="measurement-list">
+                                    <li>Length: ${data.length_foot.length_l} mm</li>
+                                    <li>Ball: ${data.length_foot.ball_l} mm</li>
+                                    <li>Waist: ${data.length_foot.waist_l} mm</li>
+                                    <li>Instep: ${data.length_foot.instep_l} mm</li>
+                                </ul>
+                                <h5>Right Foot Measurements:</h5>
+                                <ul class="measurement-list">
+                                    <li>Length: ${data.length_foot.length_r} mm</li>
+                                    <li>Ball: ${data.length_foot.ball_r} mm</li>
+                                    <li>Waist: ${data.length_foot.waist_r} mm</li>
+                                    <li>Instep: ${data.length_foot.instep_r} mm</li>
+                                </ul>
+                               
+                            `);
+							} else {
+								$("#result").html(`
+                                <div class="alert alert-warning">
+                                    <strong>Message:</strong> ${data.Message}
+                                </div>
+                            `);
+							}
+						},
+						error: function (jqXHR, textStatus, errorThrown) {
+							$("#loading").hide();
+							$("#result").html(`
+                            <div class="alert alert-danger">
+                                <strong>Error:</strong> ${textStatus}
+                            </div>
+                        `);
+						},
+					});
+				});
+			});
+
+			function readURL(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+
+					reader.onload = function (e) {
+						$("#imagePreview").attr("src", e.target.result).show();
+					};
+
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
+		</script>
+	</body>
+</html>
