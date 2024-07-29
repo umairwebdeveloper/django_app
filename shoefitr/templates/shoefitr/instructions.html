@@ -1,0 +1,68 @@
+{% extends 'shoefitr/base1.html' %} {% load static %} {% load crispy_forms_tags %} {% block content %}
+<style>
+    .bold {
+    font-weight: bold;
+    }
+    #demo {
+        padding-left: 40px;
+        padding-right:40px;
+    }
+
+</style>
+<div class="content" style="padding: 0px; margin: 0px">
+    <script src="{% static 'assets/js/core/jquery.min.js' %}"></script>
+
+    <div class="container-fluid">
+        <div class="card card-plain">
+            <div class="card-header card-header-primary" id="cardHeader">
+                <h2 class="card-title" translate="yes" style="color:white !important;">Instructions</h2>
+            </div>
+
+            <div class="card" id="advicee" style="margin-top: 15px; border-radius: 15px">
+                <ul class="list-group list-group-flush" translate="yes">
+                    <li class="list-group-item">
+                        1- Take picture of your feet close to each other, exactly like shown below.
+                    </li>
+                    <li class="list-group-item">
+                        2- Hold phone camera close to feet and capture the whole feet.
+                    </li>
+                    <li class="list-group-item">
+                        3- You can take picture with or without socks.
+                    </li>
+                    <li class="list-group-item">
+                        4- Important to select your shoe size which you are wearing now, if not sure, see it in your current shoe label.
+                        You can select from EU, US and UK sizing systems.
+                           <div class="bold">We use this to detect and measure your foot length accurately.</div>
+                    </li>
+                </ul>
+            </div>
+            <!--
+            <div class="card-header card-header-primary">
+                <h3 class="card-title" translate="yes">Example picture</h3>
+            </div>
+            <div class="test-image" style="padding-top:30px">
+                <img class="img-responsive center-block" src="{% static 'assets/img/example.jpeg' %}" alt="Chania" style="width: 50%; height:auto;">
+            </div>
+            -->
+        </div>
+    </div>
+
+
+    <div id="demo">
+        <img class="img-responsive" src="{% static 'assets/img/demo_3.jpg' %}" alt="demo" style="width: 100%; height: auto" />
+    </div>
+    <div id="skip">
+        <button id="next-btn" class="btn" onclick="next();" >NEXT</button>
+    </div>
+</div>
+
+<!-- Configure a few settings and attach camera -->
+
+<script>
+    function next() {
+
+        window.location.href =
+            "https://api.shoefitr.io/s/?shopid={{shopid}}&userid={{userid}}&modelname={{name}}&redirecturl={{redirecturl}}";
+    }
+</script>
+{% endblock %}

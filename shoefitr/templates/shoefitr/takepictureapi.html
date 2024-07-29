@@ -1,0 +1,481 @@
+{% extends 'shoefitr/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content">
+        <div class="logo" >
+            <img class="img-responsive" src="{% static 'assets/img/shoefitr.png' %}" alt="Chania" style="width: 120px; height:auto; padding-left: 15px">
+        </div>
+        <div class="container-fluid">
+            <div class="card card-plain">
+                <div class="card-header card-header-primary" id="cardHeader">
+                    <h4 class="card-title">Take Picture</h4>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" style="padding-left:0px; padding-right:0px">
+                        <div class="card-body" id="takePicture">
+                            <!-- Camera -->
+                            <form id="fileUploadForm">
+                                <div class="form-group col-md-12 mb-0" style="margin-top: 0px;">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 mb-0" style="margin-top: 1%; padding-bottom:0px">
+                                            <p>1- Put a white sheet of paper on the ground (A4/US Letter)</p>
+                                            <p>2- Place bare foot on centre of the paper</p>
+                                            <p>3- Put your heel at edge of the paper</p>
+                                            <p>4- Take picture from waist height</p>
+                                            <p>5- Click on camera live feed to scan foot</p>
+                                            <p>6- Click on Upload button to upload</p>
+                                        </div>
+                                                <div class=" col-md-12 mb-0" style="margin-top: 0px; color:purple">
+                                                    <h3 id="cameraHeading">Place Your <strong>Left</strong> Foot</h3>
+                                                </div>
+                                                <div class=" col-md-6 mb-0" style="margin-top: 0px;">
+                                                    <div id="video-player"
+                                                         style="position: relative; top: 0; left: 0; max-width:700px; width: auto; height: 100%; background-color: #000; z-index: 999;">
+                                                        <video id="my_camera" autoplay playsinline muted
+                                                               style=" width: 100%; height: 100%; display: block;" onClick="take_snapshot()" data-toggle="tooltip"  title="click to scan foot">
+                                                        </video>
+                                                    </div>
+
+                                                    <canvas style="display:none;"></canvas>
+
+                                                </div>
+                                                <div class=" col-md-6 mb-0"
+                                                     style="margin-top: 0px; ">
+                                                    <div id="video_screenshot"
+                                                         style="position: relative; top: 0; left: 0; max-width:700px; width: auto; height: 100%; background-color: #000; z-index: 999;">
+                                                        <img id="my_screenshot"
+                                                             style="width: 100%; height: 100%; display: block;" >
+                                                    </div>
+                                                </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row" id="buttons">
+                            <div class="col" style="padding-left:35px; padding-right:35px">
+                                <button class="btn btn-primary" type="button"
+                                        value="Take Snapshot" onClick="take_snapshot();">
+                                    Scan Foot
+                                </button>
+                            </div>
+                            <div class="col" style="padding-left:35px; padding-right:35px">
+                                <button class="btn btn-success pull-right" type="button" id="btnSubmit"
+                                        onclick="uploadpictureofLeftFoot();">
+                                    Upload Picture
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="row" id="redirectBtn">
+                            <div  class="col-md-12 " style="padding:35px;">
+                                <button class="btn btn-info " type="button" id="btnSubmit"
+                                        onclick="redirectWebshop();">
+                                    Go Back to Webshop
+                                </button>
+                            </div>
+                        </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+                        <div id="result" class="form-group col-md-12 mb-0" style="margin-top: 10px;">
+
+                            <div class="form-row">
+                                <table class="form-group col-md-8 mb-0 border">
+                                    <tr style="background-color: purple;color: white;">
+                                        <th>Feet Scan</th>
+                                        <th>Length</th>
+                                        <th>Width</th>
+                                    </tr>
+                                    <tr id="leftshoesrow">
+                                        <th>Left Foot</th>
+
+                                    </tr>
+                                    <tr id="rightshoesrow">
+                                        <th>Right Foot</th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card" id="advice">
+
+                      <ul class="list-group list-group-flush">
+
+                        <li class="list-group-item" id="correct_advice"></li>
+
+                        <li class="list-group-item" id="width_advice"></li>
+
+                      </ul>
+                    </div>
+
+                    <div class="row" >
+                        <h4 id="ladvice" style="padding-left:15px;color:purple;"></h4>
+                    </div>
+                    <div class="row" >
+                        <h4 id="wadvice" style="padding-left:15px;color:purple;"></h4>
+                    </div>
+                    <div id="error" style="color:red"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 type="hidden" id="user" name= {{ request.user }}></h1>
+    <!-- Configure a few settings and attach camera -->
+    <script>
+        var ladvice = '';
+        var wadvice = '';
+        var lbigger = 0.0;
+        var wbigger = 0.0;
+       const constraints = {
+            video: {
+                facingMode: "environment",
+            },
+        };
+        var video = document.querySelector("#my_camera");
+
+        navigator.mediaDevices
+            .getUserMedia(constraints)
+            .then(function (stream) {
+                video.srcObject = stream;
+                console.log('data');
+                console.log(calculateModelId('frankie',85.0,262.0));
+                //video.src = window.URL.createObjectUrl(stream);
+            })
+            .catch(function (err) {
+                alert(err);
+            });
+
+        function take_snapshot() {
+            // take snapshot and get image data
+            var img = document.querySelector('#my_screenshot');
+            var vid = document.querySelector('#my_camera');
+            var canvas = document.createElement('canvas');
+            $('#video_screenshot').show();
+             canvas.width = vid.videoWidth;
+            canvas.height = vid.videoHeight;
+            canvas.getContext('2d').drawImage(vid, 0, 0);
+            // Other browsers will fall back to image/png
+            img.src = canvas.toDataURL('image/jpeg', 1);
+        }
+        function redirectWebshop() {
+
+            location.href = "http://" + "{{ redirecturl }}";
+        }
+
+        function uploadpictureofLeftFoot() {
+            var picture = $('#my_screenshot').attr('src');
+            var w = '10';
+            var l = '20';
+            if (picture) {
+                var token = '{{csrf_token}}';
+                var data = function () {
+                    var tmp = {'hello':'hello'};
+                    $.ajax({
+                    type: "POST",
+                    url: "https://scan.shoefitr.io/getfile",
+                    data: JSON.stringify({
+                        'image': picture
+                    }),
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json",
+                    cache: false,
+                    async: false,
+                    global: false,
+                    timeout: 600000,
+                    success: function (data) {
+                        tmp=data;
+                        console.log(data);
+                        console.log('data sent Successfully');
+                        try{
+                        var width = Math.round(parseFloat(data.dimensions.width));
+
+                        var length = Math.round(parseFloat(data.dimensions.length));
+
+                        console.log(length, " ", width);
+
+                        $('#leftshoesrow').replaceWith(function(){
+                                                        return '<tr id="leftshoesrow"><th>Left Foot</th><td>' + length.toString() + '</td><td>' + width.toString() + '</td></tr>';
+                        });
+                        $('#cameraHeading').replaceWith(function(){
+                                                        return "<h3>Now Place <strong>Right</strong> Foot</h3>";
+                        });
+                        $('#btnSubmit').replaceWith(function(){
+                                                        return '<button class="btn btn-success pull-right" type="button" id="btnSubmit" onclick="uploadpictureofRightFoot();">Upload Picture</button>';
+                        });
+                        $('#results').empty();
+                        $('#result').show();
+                        $('#error').hide();
+                        $('#video_screenshot').hide();
+                        }
+                        catch{
+                            $('#error').show();
+                            $('#error').text(data.Error);
+                        }
+                    },
+                    error: function (e) {
+                        //$("#result").text(e.responseText);
+                        console.log("ERROR : ");
+                        console.log(e);
+                    },
+
+                });
+                return tmp;
+                }();
+                console.log('test');
+                console.log(data);
+                try{
+                console.log(data);
+                var width = Math.round(parseFloat(data.dimensions.width));
+                wbigger = width;
+                width = width.toString();
+                var length = Math.round(parseFloat(data.dimensions.length));
+                lbigger = length;
+                length = length.toString();
+                 /*$.ajax({
+
+                    headers: { "X-CSRFToken": token },
+                    url: "{% url 'save' %}",
+                    type:"POST",
+                    data: {
+                        'picture': picture,
+                        'shopid': "{{shopid}}",
+                        'userid': '{{userid}}',
+                        'modelid': '{{modelid}}',
+                        'length': length,
+                        'width': width,
+                        'size_eu': '{{ sizeeu }}',
+                        'size_uk': '{{ sizeuk }}',
+                        'size_us': '{{ sizeus }}',
+                        'shoespair': 'left'},
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data)
+                    }
+                });*/}
+                catch{
+                    console.log('Error!');
+                }
+            } else {
+                console.log("Please Take a picture");
+                return false;
+            }
+
+        }
+        function calculateModelId(name,wbigger,lbigger){
+            var data = '{{ data }}';
+            data=JSON.parse(data.replace(/&quot;/g,'"'));
+            var ladvice = ' ';
+            var wadvice = 'No Match';
+            var x;
+            var modelid;
+            var size;
+            var found = false;
+            for (x of data){
+                var l = x.Length;
+                var w = x.Width;
+
+                if (x.Name.toLowerCase() == name.toLowerCase()){
+                    found = true;
+                    console.log(w,l,wbigger,lbigger);
+                    if(wbigger <= w){
+                        if(wbigger >= w-20)
+                            wadvice ='Fit';
+                        else
+                            wadvice = 'Too Loose';
+                    }
+                    else if(wbigger > w){
+                        wadvice = 'Too Tight';
+                    }
+
+                    console.log(wadvice);
+                    if(lbigger <= l+10 && lbigger >= l){
+                        ladvice = 'Fit';
+                    }
+                    else if(lbigger < l){
+                        ladvice =  'Too Long';
+                    }
+                    else{
+                        ladvice = 'Too Short';
+                    }
+                    console.log(ladvice);
+                }
+                if (ladvice == 'Fit'){
+                    modelid = x.ModelId;
+                    size = x.SizeEU;
+                    break;
+                }
+                else{
+                    modelid = 'No Match';
+                    size = 'No Match';
+                }
+            }
+            return {"modelid":modelid,"size":size,"found":found,"wadvice":wadvice};
+
+        }
+
+        function uploadpictureofRightFoot() {
+            var picture = $('#my_screenshot').attr('src');
+            //var client_name = {{ request.user }};
+
+            if (picture) {
+                var token = '{{csrf_token}}';
+
+                var data = function () {
+                    var tmp = {'hello':'hello'};
+                    $.ajax({
+                    type: "POST",
+                    url: "https://scan.shoefitr.io/getfile",
+                    data: JSON.stringify({
+                        'image': picture
+                    }),
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json",
+                    cache: false,
+                    async: false,
+                    global: false,
+                    timeout: 600000,
+                    success: function (data) {
+                        tmp=data;
+                        console.log(data);
+                        console.log('data sent Successfully');
+                        try{
+                        var width = Math.round(parseFloat(data.dimensions.width));
+                        var length = Math.round(parseFloat(data.dimensions.length));
+                        console.log(length, " ", width);
+                        $('#rightshoesrow').replaceWith(function(){
+                                                return '<tr id="rightshoesrow"><th>Right Foot</th><td>' + length.toString() + '</td><td>' + width.toString() + '</td></tr>';
+
+                        });
+                        $('#result').show();
+                         $('#error').hide();
+                         $('#buttons').hide();
+                         $('#redirectBtn').show();
+                         $('#takePicture').hide();
+                         $('#cardHeader').hide();
+                        }
+                        catch{
+                            $('#error').show();
+                            $('#error').text(data.Error);
+                        }
+                    },
+                    error: function (e) {
+                        //$("#result").text(e.responseText);
+
+                        console.log("ERROR : ");
+                        console.log(e);
+                    },
+
+                });
+                return tmp;
+                }();
+                console.log('test');
+                console.log(data);
+                try{
+                console.log(data);
+                var width = Math.round(parseFloat(data.dimensions.width));
+
+                var length = Math.round(parseFloat(data.dimensions.length));
+                if(lbigger < length){
+                    lbigger = length;
+                    wbigger = width;
+                }
+                console.log(lbigger);
+                console.log(wbigger);
+                var w = '{{ width }}';
+                var l = '{{ length }}';
+                console.log(w);
+                console.log(l);
+                w = parseFloat('{{ width }}');
+
+                l = parseFloat('{{ length }}');
+                console.log(w);
+                console.log(l);
+                if(wbigger >= w-20 && wbigger <= w){
+                    wadvice = 'Fit';
+                }
+                else if(wbigger > w){
+                    wadvice = 'Too Tight';
+                }
+                else{
+                    wadvice = 'Too Loose';
+                }
+                console.log(wadvice);
+                if(lbigger <= l+10 && lbigger >= l){
+                    ladvice = 'Fit';
+                }
+                else if(lbigger < l){
+                    ladvice = 'Too Big';
+                }
+                else{
+                    ladvice = 'Too Short';
+                }
+                console.log(ladvice);
+                var modelName = '{{ name }}';
+                var correct = calculateModelId(modelName,wbigger,lbigger);
+                if (wbigger > 0){
+
+
+                    $('#advice').show();
+                    if(correct.found == false){
+                        $('#correct_advice').text('Model name "'+modelName+'" is not correct.');
+                    }
+                    else{
+                        //$('#size_advice').text('This shoe is '+ladvice+' for your feet.');
+                        if(correct.size == 'No Match')
+                            $('#correct_advice').text('No correct match found for your feet.');
+                        else{
+                            $('#correct_advice').text('Correct size found is '+correct.size+' with Model ID = '+correct.modelid+'.');
+                            $('#width_advice').text('This shoe is '+correct.wadvice+' for you.');
+                        }
+                    }
+
+
+                }
+                $(window).scrollTop(0);
+                width = width.toString();
+                length = length.toString();
+                $.ajax({
+                    headers: { "X-CSRFToken": token },
+                    url: "{% url 'save' %}",
+                    type:"POST",
+                    data: {
+                        'picture': picture,
+                        'shopid': "{{shopid}}",
+                        'userid': '{{userid}}',
+                        'modelid': correct.modelid,
+                        'length': length,
+                        'width': width,
+                        'size_eu': correct.size,
+                        'size_uk': correct.wadvice,
+                        'size_us': modelName,
+                        'shoespair': 'right'},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.details === 'true') {
+                            console.log("Image saved Successfully!!!")
+                        }
+                    },
+                    error: function (e) {
+                        //$("#result").text(e.responseText);
+                        console.log("ERROR SAVING: ");
+                        console.log(e);
+                    },
+                });}
+                catch(err){
+                    console.log('Error!',err);
+                }
+            } else {
+                console.log("Please Take a picture");
+                return false;
+            }
+        }
+
+    </script>
+{% endblock %}

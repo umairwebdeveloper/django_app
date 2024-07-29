@@ -1,0 +1,57 @@
+{% extends 'shoefitr/base.html' %}
+{% block content %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Feet Pictures</h4>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="form-horizontal form_middle">
+                            <div class="row">
+                                {% for shoe in allShoes %}
+                                    <div class="form-group col-md-3 mb-0">
+                                        <a class="thumbnail" href="#" data-image-id="{{ shoe.id }}"
+                                           data-toggle="modal"
+                                           data-title=""
+                                           data-image="{{ shoe.picture }}" data-target="#image-gallery">
+                                            <img class="img-thumbnail" style="width: 300px; height:auto;" src="{{ shoe.picture }}"
+                                                 alt="Another alt text" onclick="modelfunction({{ shoe.id }})">
+                                        </a>
+                                        <h6>Shoes Pair: {{ shoe.shoes_pair }}</h6>
+                                        <h6>User Id: {{ shoe.user_id }}</h6>
+                                        <h6> Shop ID: {{ shoe.shop_id }}</h6>
+                                        <h6>Shoes Model ID: {{ shoe.shoes_model_id }}</h6>
+                                        <h6>Client Name: {{ shoe.client }}</h6>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h5 id="content"></h5>
+        </div>
+    </div>
+    </div>
+    <script>
+        function demo() {
+            $.ajax({
+                url: "http://127.0.0.1:8005/shoesapi/",
+                data: {
+                    'client': "{{ request.user }}"
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var images = '';
+                    for (var i = 0; i < data.length; ++i) {
+                        images += '<img src="' + data[i]['picture'] + '" />';
+                    }
+
+                    document.getElementById('images').innerHTML = images;
+                }
+            });
+        }
+    </script>
+{% endblock %}

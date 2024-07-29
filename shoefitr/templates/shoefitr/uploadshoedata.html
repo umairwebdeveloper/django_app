@@ -1,0 +1,30 @@
+{% extends 'shoefitr/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="main_content">
+        <h2 style="font-weight: bold; margin-left: 25%; margin-top: 10%; margin-bottom: 5%">Shoe Last Data File</h2>
+        <div class="info">
+            <div class="container" style="margin-top: 1%; margin-left: 5%; ">
+                <form enctype='multipart/form-data' method="POST" style="" action="">{% csrf_token %}
+                    <div class="col-md-12 " style="margin-top: 0px;">
+                        <div class="form-row">
+                            <div class="col-md-4" style="margin-top: 0px;">
+                                <a href="{{ prev_file.file.url }}" class="btn btn-info btn-lg">
+                                    <span class="glyphicon glyphicon-download-alt"></span> Download
+                                </a>  {{ prev_file }}
+                            </div>
+                            <div class="col-md-4" style="margin-top: 0px;">
+                                {{ form }}
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-primary" type="submit">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'shoefitr/base.html' %}
+{% block content %}
+    <div class="main-panel">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card card-chart">
+                            <div class="card-header card-header-success">
+                                <canvas
+                                        class="ct-chart"
+                                        id="myChart"
+                                        width="1600"
+                                        height="900"
+                                        style="border-color: #3e95cd; fill: false;"
+                                ></canvas>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Monthly Size Advice Chart</h4>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <i class="material-icons">access_time</i> updated 4
+                                    minutes ago
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container-fluid">
+                <nav class="float-left">
+                    <ul>
+                        <li>
+                            <a href="https://www.creative-tim.com">
+                                Creative Tim
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://creative-tim.com/presentation">
+                                About Us
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://blog.creative-tim.com">
+                                Blog
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.creative-tim.com/license">
+                                Licenses
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="copyright float-right">
+                    &copy;
+                    <script>
+                        document.write(new Date().getFullYear());
+                    </script>
+                    , made with <i class="material-icons">favorite</i> by
+                    <a href="https://www.creative-tim.com" target="_blank"
+                    >Creative Tim</a
+                    >
+                    for a better web.
+                </div>
+            </div>
+        </footer>
+    </div>
+{% endblock %}

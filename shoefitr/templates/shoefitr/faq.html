@@ -1,0 +1,15 @@
+{% extends 'shoefitr/base.html' %}
+{% block content %}
+    <button class="btn-primary" onclick="demo()">Click</button>
+    <script>
+        function demo() {
+            $.ajax({
+                url: "{% url 'shoesapi' %}",
+                dataType: "json",
+                success: function (data) {
+                    alert(data[0].name)
+                }
+            });
+        }
+    </script>
+{% endblock %}

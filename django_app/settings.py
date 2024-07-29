@@ -27,19 +27,27 @@ SECRET_KEY = 'django-insecure-hp9@uvc@6eww=&inb1k!a#ltx_@9q51njqm8jp-f3ryk_6fu1u
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-
 # Application definition
 
 INSTALLED_APPS = [
+    "djstripe",
+    "users.apps.UsersConfig",
+    "authentication.apps.AuthConfig",
+    'shoefitr.apps.ShoefitrConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
-    'myapp',
+    "crispy_forms",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "corsheaders",
+    # "google_translate",
+    # "storages",
+    "utils",
+    "models",
 ]
 
 MIDDLEWARE = [
@@ -54,6 +62,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_app.urls'
+AUTH_USER_MODEL = "shoefitr_auth.User"
 
 TEMPLATES = [
     {
@@ -82,6 +91,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",  # <-- And here
+    ],
 }
 
 
@@ -122,15 +137,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# allow all subdomains of allowed host
-CORS_ALLOW_ALL_ORIGINS = True
-
-# allow all subdomains in localhost
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "index"
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SAMESITE = "None"
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
