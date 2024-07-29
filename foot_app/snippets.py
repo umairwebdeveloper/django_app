@@ -1,15 +1,23 @@
 import torch
 from shoefitr.models import Settings
 from utils.datasets import letterbox
-from utils.torch_utils import select_device
+from utils.torch_utils import select_device, load_classifier, time_synchronized
 from models.experimental import attempt_load
 from utils.general import (
     check_img_size,
+    check_requirements,
+    check_imshow,
     non_max_suppression,
+    apply_classifier,
     scale_coords,
+    xyxy2xywh,
+    strip_optimizer,
+    set_logging,
+    increment_path,
 )
-from utils.depth_calculator import convert
+# from utils.depth_calculator import midas,predict,convert
 import cv2, numpy as np
+import os
 import math
 
 device = "cpu"
@@ -420,12 +428,12 @@ def detect_fun(image, foot_length_inches=-1.0, PPI=-1.0):
             if not PPI > 0:  # if PPI paramater provided
                 scale = Settings.objects.first().scale if Settings.objects.first() else SCALE
                 PPI = length / foot_length_inches
-                mid_y,mid_x = convert(left_foot_box)
-                print('mid_x:',mid_x)
-                print('mid_y:',mid_y)
-                print('Left foot box:',left_foot_box)
-                print('length:',length)
-                print('scale:',scale)
+                # mid_y,mid_x = convert(left_foot_box)
+                # print('mid_x:',mid_x)
+                # print('mid_y:',mid_y)
+                # print('Left foot box:',left_foot_box)
+                # print('length:',length)
+                # print('scale:',scale)
                 # _,predicted = predict(image,midas,mid_y,mid_x)
                 # scaled_predicted = fractor_scaled(predicted,scale)
                 # print('predicted:',predicted)
