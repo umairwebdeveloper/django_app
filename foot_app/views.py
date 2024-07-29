@@ -190,8 +190,9 @@ def calculation(request):
                 "message": message,
             }
             print(32323, "Errrorr", message)
-
-            return JsonResponse(response_data)
+            
+            return JsonResponse(response_data, status=403)
+    return JsonResponse({"message": "Invalid request"})
 
 
 @csrf_exempt

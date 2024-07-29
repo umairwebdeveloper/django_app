@@ -30,10 +30,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    "djstripe",
-    "users.apps.UsersConfig",
-    "authentication.apps.AuthConfig",
-    'shoefitr.apps.ShoefitrConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +40,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    "djstripe",
+    "users.apps.UsersConfig",
+    'shoefitr.apps.ShoefitrConfig',
+    "authentication.apps.AuthConfig",
     # "google_translate",
     # "storages",
     "utils",
