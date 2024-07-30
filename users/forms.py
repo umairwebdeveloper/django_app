@@ -1,5 +1,5 @@
 from django import forms
-from shoefitr1.models import User
+from shoefitr.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 

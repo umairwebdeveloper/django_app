@@ -1,5 +1,5 @@
 import torch
-from shoefitr1.models import Settings
+from shoefitr.models import Settings
 from utils.datasets import letterbox
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 from models.experimental import attempt_load
