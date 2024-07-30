@@ -4,7 +4,7 @@ import cv2
 import pandas as pd
 from django.core.files.base import ContentFile
 from numpy import random
-from shoefitr.models import Shoes, Shop, User, data, margin, Reference
+from shoefitr1.models import Shoes, Shop, User, data, margin, Reference
 import numpy as np
 from statistics import mean
 
