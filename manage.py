@@ -3,8 +3,12 @@
 import os
 import sys
 
+import dotenv
+
 
 def main():
+    dotenv.read_dotenv()
+
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_app.settings')
     try:

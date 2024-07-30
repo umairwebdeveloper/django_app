@@ -1,0 +1,279 @@
+{% extends 'shoefitr/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="card card-plain">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Take Picture</h4>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <!-- Camera -->
+                            <form id="fileUploadForm" method="POST" enctype="multipart/form-data">
+
+                                <div class="form-group col-md-12 mb-0" style="margin-top: 0px;">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 mb-0" style="margin-top: 3%;">
+                                            <p>1- Place the foot on the page</p>
+                                            <p>2- Heel should be at the edge of the page</p>
+                                            <p>3- Foot should be straight</p>
+                                            <p>4- Take a picture from waist height</p>
+                                            <p>5- Image should be without shadow</p>
+                                            <p>6- Background should not be white</p>
+                                        </div>
+                                        <div class="form-group col-md-8 mb-0" style="margin-top: 0px;">
+                                            <h3>Form</h3>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-3 mb-0" style="margin-top: 0px;">
+                                                    {{ form.user_id|as_crispy_field }}
+                                                </div>
+                                                <div class="form-group col-md-3 mb-0" style="margin-top: 0px;">
+                                                    {{ form.shop_id|as_crispy_field }}
+                                                </div>
+                                                <div class="form-group col-md-3 mb-0" style="margin-top: 0px;">
+                                                    {{ form.shoes_model_id|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                            <h4>Shoes Data</h4>
+                                            <div class="form-row">
+                                                <table class="form-group col-md-8 mb-0 border">
+                                                    <tr class="bg-info">
+                                                        <th>Shoes</th>
+                                                        <th>Length</th>
+                                                        <th>Width</th>
+                                                        <th>Size</th>
+                                                    </tr>
+                                                    <tr id="leftshoesrow">
+                                                        <td>Left Shoes</td>
+
+                                                    </tr>
+                                                    <tr id="rightshoesrow">
+                                                        <td>Right Shoes</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="form-row">
+                                                <h1 id="displayconfirmation"></h1>
+                                            </div>
+                                        </div>
+                                        <form class="form-horizontal form_middle" id="picturesForm">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 mb-0" style="margin-top: 1%;">
+                                                    <h2 id="cameraHeading">Place Your <strong>Left</strong> Foot</h2>
+                                                </div>
+                                                <div class="form-group col-md-4 mb-0" style="margin-top: 1%;">
+                                                    <div id="my_camera"
+                                                         style="position: relative; top: 0; left: 0; width: auto; height: 100%; background-color: #000; z-index: 999;">
+                                                        <video id="my_camera" autoplay="true;"
+                                                               style="width: 100%;height: 100%;display: block;"></video>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-4 mb-0"
+                                                     style="margin-top: 1%; margin-left: 10%">
+                                                    <div id="results"></div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <button class="btn btn-primary pull-left" type="button"
+                                        value="Take Snapshot" onClick="take_snapshot();">
+                                    Take SnapShot
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-primary pull-right" type="button" id="btnSubmit"
+                                        onclick="uploadpictureofLeftFoot();">
+                                    Upload Picture
+                                </button>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3" id="length"></div>
+                <div class="col-3" id="width"></div>
+            </div>
+        </div>
+    </div>
+    <h1 type="hidden" id="user" name= {{ request.user }}></h1>
+    <!-- First, include the Webcam.js JavaScript Library -->
+    <script type="text/javascript" src="{% static 'webcamjs-master/webcam.js' %}"></script>
+
+    <!-- Configure a few settings and attach camera -->
+    <script>
+        Webcam.set({
+            width: 400,
+            height: 300,
+            image_format: 'jpeg',
+            jpeg_quality: 90,
+            video: {
+                facingMode: "environment",
+            },
+        });
+        Webcam.attach('#my_camera');
+    </script>
+    <script>
+        function test() {
+        }
+
+        function take_snapshot() {
+            // take snapshot and get image data
+            Webcam.snap(function (data_uri) {
+                // display results in page
+                document.getElementById('results').innerHTML =
+                    '<img id="campicture" src="' + data_uri + '"/>';
+            });
+        }
+
+        function uploadpictureofLeftFoot() {
+            var picture = $('#campicture').attr('src');
+            //var client_name = {{ request.user }};
+            var user_id = $('#id_user_id').val();
+            var shop_id = $('#id_shop_id').val();
+            var shoes_model_id = $('#id_shoes_model_id').val();
+            if (user_id === '' || shop_id === '' || shoes_model_id === '') {
+                alert('Please Fill All the Form Fields');
+                return false;
+            }
+            if (picture) {
+                $.ajax({
+                    type: "POST",
+                    url: "https://scan.shoefitr.io/getfile",
+                    data: JSON.stringify({
+                        'image': picture,
+                        'user_id': user_id
+                    }),
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json",
+                    cache: false,
+                    timeout: 600000,
+                    success: function (data) {
+                        console.log(data);
+                        console.log('data sent Successfully');
+                        var width = Math.round(parseFloat(data.dimensions.width));
+                        var length = Math.round(parseFloat(data.dimensions.length));
+                        console.log(length, " ", width);
+
+                        $('#leftshoesrow').replaceWith(`<tr id="leftshoesrow">
+                                                            <td>Left Shoes</td>
+                                                            <td>` + length + `</td>
+                                                            <td>` + width + `</td>
+                                                            <td>6</td>
+                                                        </tr>`);
+                        $('#cameraHeading').replaceWith(`<h2>Now Place <strong>Right</strong> Foot</h2>`);
+                        $('#btnSubmit').replaceWith(`<button class="btn btn-primary pull-right" type="button" id="btnSubmit"
+                                        onclick="uploadpictureofRightFoot();">
+                                    Upload Picture
+                                </button>`);
+                        $('#results').empty();
+
+                    },
+                    error: function (e) {
+                        //$("#result").text(e.responseText);
+                        console.log("ERROR : ");
+                        console.log(e);
+                    },
+
+                });
+                $.ajax({
+                    url: "{% url 'testajaxfunction' %}",
+                    data: {
+                        'picture': picture,
+                        'client': "{{ request.user }}",
+                        'user_id': user_id,
+                        'shop_id': shop_id,
+                        'shoes_model_id': shoes_model_id,
+                        'shoes_pair': 'left'
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.details === 'true') {
+                            console.log("Image saved Successfully!!!")
+                        }
+                    }
+                });
+            } else {
+                console.log("Please Take a picture");
+                return false;
+            }
+
+        }
+
+        function uploadpictureofRightFoot() {
+            var picture = $('#campicture').attr('src');
+            //var client_name = {{ request.user }};
+            var user_id = $('#id_user_id').val();
+            var shop_id = $('#id_shop_id').val();
+            var shoes_model_id = $('#id_shoes_model_id').val();
+            if (user_id === '' || shop_id === '' || shoes_model_id === '') {
+                alert('Please Fill All the Form Fields')
+                return false;
+            }
+            if (picture) {
+                $.ajax({
+                    url: "{% url 'testajaxfunction' %}",
+                    data: {
+                        'picture': picture,
+                        'client': "{{ request.user }}",
+                        'user_id': user_id,
+                        'shop_id': shop_id,
+                        'shoes_model_id': shoes_model_id,
+                        'shoes_pair': 'right'
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.details === 'true') {
+                            console.log("Image saved Successfully!!!")
+                        }
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "https://scan.shoefitr.io/getfile",
+                    data: JSON.stringify({
+                        'image': picture,
+                        'user_id': user_id
+                    }),
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json",
+                    cache: false,
+                    timeout: 600000,
+                    success: function (data) {
+                        console.log(data);
+                        console.log('data sent Successfully');
+                        var width = Math.round(parseFloat(data.dimensions.width));
+                        var length = Math.round(parseFloat(data.dimensions.length));
+                        console.log(length, " ", width);
+                        $('#rightshoesrow').replaceWith(`<tr id="rightshoesrow">
+                                                            <td>Right Shoes</td>
+                                                            <td>` + length + `</td>
+                                                            <td>` + width + `</td>
+                                                            <td>5</td>
+                                                        </tr>`);
+                    },
+                    error: function (e) {
+                        //$("#result").text(e.responseText);
+                        console.log("ERROR : ");
+                        console.log(e);
+                    },
+
+                });
+            } else {
+                console.log("Please Take a picture");
+                return false;
+            }
+        }
+
+    </script>
+{% endblock %}

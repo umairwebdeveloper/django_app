@@ -1,0 +1,106 @@
+{% extends 'shoefitr/base2.html' %} {% load static %} {% block content %}
+
+<div class="container-center-horizontal">
+  <div class="main home screen">
+    {% include 'shoefitr/navbar.html' %}
+
+    <div class="check-your-feet-size animate-enter11" show-on-scroll>
+      <span class="poppins-semi-bold-log-cabin-20px">Check your </span
+      ><span class="span-1">size</span
+      ><span class="poppins-semi-bold-log-cabin-20px">
+        by using our service</span
+      >
+    </div>
+    <div class="overlap-group3">
+      <p class="check-your-size-by-u animate-enter17" show-on-scroll>
+        Check your size by using our service that connect foot and shoe fitting
+        together
+      </p>
+    </div>
+    <img
+      class="image animate-enter16"
+      show-on-scroll
+      src="{% static 'assets/img/hero.svg' %}"
+    />
+    <div class="how-it-works animate-enter12" show-on-scroll>How It Works?</div>
+    <div class="frame-26 animate-enter13" show-on-scroll>
+      <div class="feature">
+        <div class="icon">
+          <img
+            class="camera_enhance"
+            src="{% static 'assets/img/camera-enhance-1@2x.svg' %}"
+          />
+        </div>
+        <div class="feature-info">
+          <p class="take-picture-of-your-feet poppins-semi-bold-log-cabin-16px">
+            Take Picture Of Your Feet
+          </p>
+          <p class="info poppins-normal-mountain-mist-14px">
+            Take picture of your feet close to each other, exactly like shown in
+            the picture.
+          </p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="icon-1">
+          <img class="socks" src="{% static 'assets/img/socks-1@2x.svg' %}" />
+        </div>
+        <div class="feature-info">
+          <div class="with-or-without-socks poppins-semi-bold-log-cabin-16px">
+            With or without socks
+          </div>
+          <p class="info poppins-normal-mountain-mist-14px">
+            You can take the picture with or without socks.
+          </p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="icon-2">
+          <img class="shoe-1" src="{% static 'assets/img/shoe-1-1@2x.svg' %}" />
+        </div>
+        <div class="feature-info">
+          <div class="select-your-shoe-size poppins-semi-bold-log-cabin-16px">
+            Select your shoe size
+          </div>
+          <p class="info poppins-normal-mountain-mist-14px">
+            See the shoe size in your current shoe label. You can select from
+            EU, US and UK sizing systems.
+          </p>
+        </div>
+      </div>
+    </div>
+    <button
+      class="button-2 poppins-semi-bold-white-14px animate-enter10"
+      onclick="next()"
+      show-on-scroll
+    >
+      Check Now
+    </button>
+    <p
+      class="note poppins-normal-mountain-mist-12px animate-enter14"
+      show-on-scroll
+    >
+      For an accurate scan, hold phone 30 cm away from your feet
+    </p>
+    <div class="overlap-group2">
+      <div class="image-1 animate-enter15" show-on-scroll>
+        <div class="overlap-group1">
+          <div class="ellipse-4"></div>
+          <img
+            class="rectangle"
+            src="{% static 'assets/img/rectangle-2@2x.png' %}"
+          />
+          <div class="ellipse-34"></div>
+          <div class="ellipse-36"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function next() {
+    window.location.href = "/confirm1";
+  }
+</script>
+
+{% endblock %}

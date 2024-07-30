@@ -2,5 +2,6 @@ venv
 __pycache__
 *.pyc
 db.sqlite3
-static
-shoefitr
+.env
+feet_updated.pt
+feet_updated2.pt

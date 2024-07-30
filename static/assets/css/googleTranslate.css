@@ -1,0 +1,119 @@
+/*google translate Dropdown */
+#google_translate_element select {
+  background: var(--royal-blue);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-family-poppins);
+  color: white;
+  border: none !important;
+  border-radius: 4px;
+  padding: 6px 0px 6px 5px;
+
+  /* Remove default arrow */
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+
+  /* Add custom arrow */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 5px;
+}
+
+/* Hide google translate quick pop up for original text */
+#goog-gt- {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/*google translate link | logo */
+.goog-logo-link {
+  display: none !important;
+}
+.goog-te-gadget {
+  color: transparent !important;
+}
+
+/* google translate banner-frame */
+
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+.goog-tooltip {
+  display: none !important;
+}
+.goog-tooltip:hover {
+  display: none !important;
+}
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+body {
+  top: 0px !important;
+}
+/* hiding powered by google translate */
+
+#google_translate_element .skiptranslate > :nth-child(n+2) {
+  display: none;
+}
+.goog-te-menu-frame {
+  max-width: 100% !important;
+}
+
+.goog-te-menu2 {
+  max-width: 100% !important;
+  overflow-x: scroll !important;
+  box-sizing: border-box !important;
+  height: auto !important;
+  padding-bottom: 10px !important;
+}
+
+.goog-te-gadget-simple {
+  padding: 6px 11px 7px 11px !important;
+  border-radius: 4px !important;
+  background-color: var(--royal-blue);
+  font-size: 14pt;
+  border: 0;
+}
+
+.goog-te-gadget-icon {
+  display: none;
+}
+
+.goog-te-menu-value span:nth-child(5) {
+  color: white !important;
+}
+
+.goog-te-menu-value span:nth-child(3) {
+  display: none;
+}
+.goog-te-menu-value span:nth-child(1) {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  font-family: "Poppins" !important;
+  color: white !important;
+}
+.goog-te-combo {
+  margin: 0 !important;
+}
+#google_translate_element {
+  margin-top: 12px !important;
+  transition: all 0.3s ease;
+}

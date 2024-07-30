@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+from distutils.util import strtobool
 from pathlib import Path
 import os
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-hp9@uvc@6eww=&inb1k!a#ltx_@9q51njqm8jp-f3ryk_6fu1u'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -174,32 +177,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     DJSTRIPE_FOREIGN_KEY_TO_FIELD = stripe_config.DJSTRIPE_FOREIGN_KEY_TO_FIELD
 
 # except:
-#     STRIPE_LIVE_MODE = bool(
-#         strtobool(os.getenv("STRIPE_LIVE_MODE", "False"))
-#     )  # Boolean field
+STRIPE_LIVE_MODE = bool(
+    strtobool(os.getenv("STRIPE_LIVE_MODE", "False"))
+)  # Boolean field
 
-#     STRIPE_TEST_PUBLISHABLE_KEY = os.getenv("STRIPE_TEST_PUBLISHABLE_KEY")
-#     STRIPE_TEST_SECRET_KEY = os.getenv("STRIPE_TEST_SECRET_KEY")
+STRIPE_TEST_PUBLISHABLE_KEY = os.getenv("STRIPE_TEST_PUBLISHABLE_KEY")
+STRIPE_TEST_SECRET_KEY = os.getenv("STRIPE_TEST_SECRET_KEY")
 
-#     STRIPE_LIVE_PUBLISHABLE_KEY = os.getenv("STRIPE_LIVE_PUBLISHABLE_KEY")
-#     STRIPE_LIVE_SECRET_KEY = os.getenv("STRIPE_LIVE_SECRET_KEY")
-#     DJSTRIPE_WEBHOOK_SECRET = os.getenv("DJSTRIPE_WEBHOOK_SECRET")
+STRIPE_LIVE_PUBLISHABLE_KEY = os.getenv("STRIPE_LIVE_PUBLISHABLE_KEY")
+STRIPE_LIVE_SECRET_KEY = os.getenv("STRIPE_LIVE_SECRET_KEY")
+DJSTRIPE_WEBHOOK_SECRET = os.getenv("DJSTRIPE_WEBHOOK_SECRET")
 
-#     DJSTRIPE_FOREIGN_KEY_TO_FIELD = os.getenv("DJSTRIPE_FOREIGN_KEY_TO_FIELD")
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = os.getenv("DJSTRIPE_FOREIGN_KEY_TO_FIELD")
 
-
-STRIPE_LIVE_MODE = False  # Boolean field
-
-# STRIPE_TEST_PUBLISHABLE_KEY = "pk_test_51GsppVDTeKgTTjiSz1AapUTQWQgcAQyvfQq4NKjxrYrXv8w0ztvIaTOKCRFdwVrJA0tv93xjuGM6ChR6skbf6PA000tMN37sTN"
-# STRIPE_TEST_SECRET_KEY = "sk_test_51GsppVDTeKgTTjiSa1xNo0pr5AyCNG1fDah1iTzixMKOhU7q6vGfjPgwquqbhqXzeG7JU8YZI8iX4hbgVCg8q4kW002gGwDGfd"
-
-# STRIPE_LIVE_PUBLISHABLE_KEY = "pk_live_51GsppVDTeKgTTjiSV5wvqBTIoRktc6z4CKIYjpchWIi5sCqNbQCv8uMtOlbVbbHRKvetJ2kzvh3qk7VXoQOcnIL900pGSMfhpZ"
-# STRIPE_LIVE_SECRET_KEY = "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"
-
-DJSTRIPE_WEBHOOK_SECRET = "whsec_Mib4XM2mu5QaTXzWisY9DNTu7W9faqnR"
-
-DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
-
-# LIVE_PRODUCT_ID = "prod_McgdU0l2h86H7J"
-
-# TEST_PRODUCT_ID = "prod_LBybgQ3iPGkKyk"
