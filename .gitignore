@@ -5,3 +5,4 @@ db.sqlite3
 .env
 feet_updated.pt
 feet_updated2.pt
+.DS_Store
