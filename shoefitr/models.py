@@ -1,5 +1,5 @@
 from django.db import models
-# from django_app.storage_backends import PrivateMediaStorage
+from django_app.storage_backends import PrivateMediaStorage
 from django.contrib.postgres.fields import ArrayField
 
 
@@ -44,7 +44,7 @@ class Shop(models.Model):
         null=True,
     )
     logo = models.ImageField(
-        # storage=PrivateMediaStorage(),
+        storage=PrivateMediaStorage(),
         upload_to="shop_data/",
         null=True,
         blank=True,
@@ -67,7 +67,7 @@ class Shop(models.Model):
     ogTitle = models.CharField(max_length=30, null=True, blank=True)
     ogDesc = models.CharField(max_length=200, null=True, blank=True)
     ogImage = models.ImageField(
-        # storage=PrivateMediaStorage(),
+        storage=PrivateMediaStorage(),
         upload_to="shop_data/",
         null=True,
         default=None,
@@ -146,7 +146,7 @@ class Shoes(models.Model):
 
 class data(models.Model):
     file = models.FileField(
-        # storage=PrivateMediaStorage(),
+        storage=PrivateMediaStorage(),
         upload_to="last_files/",
         max_length=255,
         null=True,
@@ -172,7 +172,11 @@ class data(models.Model):
     updated_on = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return str(self.shop.shopOwner) if self.shop else str(self.id)
+        if self.shop:
+            if self.shop.shopOwner:
+                return self.shop.shopOwner.username
+            return str(self.shop.id)
+        return str(self.id)
 
     class Meta:
         ordering = ["-created_on"]
@@ -233,7 +237,7 @@ class Device(models.Model):
     max_width = models.FloatField()
     max_height = models.FloatField()
     # point_cloud is array of array field, with inner array of 3 elements of float
-    # point_cloud = ArrayField(ArrayField(models.FloatField(), size=3))
+    point_cloud = ArrayField(ArrayField(models.FloatField(), size=3))
     created_on = models.DateTimeField(auto_now_add=True, null=True)
     updated_on = models.DateTimeField(auto_now=True, null=True)
 

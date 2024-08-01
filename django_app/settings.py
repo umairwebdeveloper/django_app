@@ -14,7 +14,7 @@ from distutils.util import strtobool
 from pathlib import Path
 import os
 import dotenv
-
+from django.apps import AppConfig
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,11 +50,11 @@ INSTALLED_APPS = [
     'shoefitr.apps.ShoefitrConfig',
     "authentication.apps.AuthConfig",
     # "google_translate",
-    # "storages",
+    "storages",
     "utils",
     "models",
 ]
-
+AppConfig.default = False
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -65,6 +65,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SAMESITE = "None"
 
 ROOT_URLCONF = 'django_app.urls'
 AUTH_USER_MODEL = "shoefitr_auth.User"
@@ -92,10 +98,26 @@ WSGI_APPLICATION = 'django_app.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("DATABASE_NAME", "main"),
+        "USER": os.environ.get("DATABASE_USER"),
+        "PASSWORD": os.environ.get("DATABASE_PASS"),
+        "HOST": os.environ.get("DATABASE_HOST"),
+        "PORT": "5432",
+    },
+    "second": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("DATABASE_NAME"),
+        "USER": os.environ.get("DATABASE_USER"),
+        "PASSWORD": os.environ.get("DATABASE_PASS"),
+        "HOST": os.environ.get("DATABASE_HOST"),
+        "PORT": "5432",
+    },
 }
 
 REST_FRAMEWORK = {
@@ -152,17 +174,25 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "index"
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = "None"
-SESSION_COOKIE_SAMESITE = "None"
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AWS_PUBLIC_MEDIA_LOCATION = "media/public"
+DEFAULT_FILE_STORAGE = "django_app.storage_backends.PublicMediaStorage"
+
+AWS_PRIVATE_MEDIA_LOCATION = "media/private"
+PRIVATE_FILE_STORAGE = "django_app.storage_backends.PrivateMediaStorage"
+
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = os.environ.get("AWS_REGION")
+AWS_S3_CUSTOM_DOMAIN = "%s.s3.%s.amazonaws.com" % (AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME)
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
 
 # try:
 #     import stripe_config

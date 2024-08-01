@@ -3,7 +3,7 @@ from djstripe.models import Customer, Subscription
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-# from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField
 
 
 class UserManager(BaseUserManager):
@@ -63,12 +63,12 @@ class User(AbstractUser):
         max_length=255, blank=False, null=True, default=AUTH_PROVIDERS.get("email")
     )
     can_access_file = models.BooleanField(default=True, null=True)
-    # allowed_domains = ArrayField(
-    #     models.CharField(max_length=100, default="", blank=True),
-    #     default=list,
-    #     blank=True,
-    #     null=True,
-    # )
+    allowed_domains = ArrayField(
+        models.CharField(max_length=100, default="", blank=True),
+        default=list,
+        blank=True,
+        null=True,
+    )
     is_admin_portal = models.BooleanField(default=False, null=True)
     is_shop_admin = models.BooleanField(default=False, null=True)
     is_customer = models.BooleanField(default=False, null=True)
