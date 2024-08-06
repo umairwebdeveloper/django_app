@@ -29,8 +29,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework.decorators import api_view
-
-
+from rest_framework import status
 from .forms import shoesform, uploadshoedataForm
 from .models import Shoes, User, data
 from .tokens import gui_button_token
@@ -482,3 +481,17 @@ def update_server(request):
         origin.pull()
         return HttpResponse("Updated PythonAnywhere successfully")
     return HttpResponse("Get Request not accepted!", status=400)
+
+
+class MatchUserIdShopOwner(APIView):
+    def post(self, request, *args, **kwargs):
+        userid = request.data.get('userid')
+        shop_owner_username = request.data.get('shopid')
+        if not userid or not shop_owner_username:
+            return Response({'error': 'userid and shopOwner are required'}, status=status.HTTP_400_BAD_REQUEST)
+        matching_shoes = Shoes.objects.filter(userid=userid, shop__shopOwner__username=shop_owner_username)
+        if matching_shoes.exists():
+            username = matching_shoes.first().shop.shopOwner.username
+            return Response({'match': True, 'username': username}, status=status.HTTP_200_OK)
+        return Response({'match': False}, status=status.HTTP_200_OK)
+       

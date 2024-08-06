@@ -27,4 +27,6 @@ urlpatterns = [
     path("test-image", views.test_image, name="test-image"),
     path("new/", views.new_page, name="new-page"),
     path("8thwall-response/", views.ethwall_response, name="ethwall_response"),
+    path('match/ids/', views.MatchUserIdShopOwner.as_view(), name='match-userid-shopowner'),
+
 ]
