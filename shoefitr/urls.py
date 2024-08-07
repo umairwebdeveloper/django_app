@@ -28,5 +28,6 @@ urlpatterns = [
     path("new/", views.new_page, name="new-page"),
     path("8thwall-response/", views.ethwall_response, name="ethwall_response"),
     path('match/ids/', views.MatchUserIdShopOwner.as_view(), name='match-userid-shopowner'),
-
+    path('shop/ids/', views.ShopIDListView.as_view(), name='shop-id-list'),
+    path('shop/model-names/<str:shopid>/', views.ModelNamesListView.as_view(), name='model-names-list'),
 ]

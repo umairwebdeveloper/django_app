@@ -31,10 +31,10 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .forms import shoesform, uploadshoedataForm
-from .models import Shoes, User, data
+from .models import Shoes
 from .tokens import gui_button_token
 from utils.specific import detect_square, to_base64
-
+from .snippets import get_model_names_from_file
 User = get_user_model()
 
 
@@ -509,4 +509,18 @@ class MatchUserIdShopOwner(APIView):
                 'reference': reference_data
             }, status=status.HTTP_200_OK)
         return Response({'match': False, 'username': '', 'reference': None}, status=status.HTTP_404_NOT_FOUND)
-       
+
+
+class ShopIDListView(APIView):
+    def get(self, request):
+        usernames = User.objects.all().values_list("username", flat=True)
+        return Response(usernames, status=status.HTTP_200_OK)
+    
+class ModelNamesListView(APIView):
+    def get(self, request, shopid):
+        model_names, error = get_model_names_from_file(shopid)
+        if error:
+            return Response({"error": error}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if model_names is None:
+            return Response({"error": "File not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"model_names": model_names}, status=status.HTTP_200_OK)
