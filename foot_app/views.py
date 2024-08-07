@@ -31,6 +31,7 @@ def calculation(request):
         size = round(float(request.POST.get("size", 0)), 2)
         selection = request.POST.get("selection", None)
         region = request.POST.get("system", None)
+        test_scan = request.POST.get("test_scan", None)
         picture_file = request.FILES.get("picture", None)
         img = cv2.imdecode(
             np.frombuffer(picture_file.read(), np.uint8), cv2.IMREAD_UNCHANGED
@@ -133,29 +134,30 @@ def calculation(request):
                 totally_fit = width_fit and ball_fit and instep_fit
                 picture_advice = f"i-{instep_color}_w-{width_color}_b-{ball_color}"
                 modelid = data["model_id"]
-                save_to_db(
-                    shopid,
-                    userid,
-                    modelid,
-                    size_data["length_l"],
-                    size_data["length_r"],
-                    size_data["waist_l"],
-                    size_data["waist_r"],
-                    size_data["instep_l"],
-                    size_data["instep_r"],
-                    size_data["ball_l"],
-                    size_data["ball_r"],
-                    correct_size,
-                    width_advice,
-                    ball_advice,
-                    instep_advice,
-                    model_name,
-                    size,
-                    selection,
-                    region,
-                    arrowed_image,
-                    None,
-                )
+                if test_scan is None:
+                    save_to_db(
+                        shopid,
+                        userid,
+                        modelid,
+                        size_data["length_l"],
+                        size_data["length_r"],
+                        size_data["waist_l"],
+                        size_data["waist_r"],
+                        size_data["instep_l"],
+                        size_data["instep_r"],
+                        size_data["ball_l"],
+                        size_data["ball_r"],
+                        correct_size,
+                        width_advice,
+                        ball_advice,
+                        instep_advice,
+                        model_name,
+                        size,
+                        selection,
+                        region,
+                        arrowed_image,
+                        None,
+                    )
             response_data = {
                 "uri": base64_string,
                 "found": found,

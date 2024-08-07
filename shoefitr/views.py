@@ -491,7 +491,22 @@ class MatchUserIdShopOwner(APIView):
             return Response({'error': 'userid and shopOwner are required'}, status=status.HTTP_400_BAD_REQUEST)
         matching_shoes = Shoes.objects.filter(userid=userid, shop__shopOwner__username=shop_owner_username)
         if matching_shoes.exists():
-            username = matching_shoes.first().shop.shopOwner.username
-            return Response({'match': True, 'username': username}, status=status.HTTP_200_OK)
-        return Response({'match': False}, status=status.HTTP_200_OK)
+            shoe = matching_shoes.first()
+            reference = shoe.reference
+            reference_data = {
+                'size': reference.size,
+                'selection': reference.selection,
+                'region': reference.region,
+                'created_on': reference.created_on,
+                'updated_on': reference.updated_on
+            } if reference else None
+            
+            print(reference, reference_data)
+            
+            return Response({
+                'match': True,
+                'username': shoe.shop.shopOwner.username if shoe.shop else "",
+                'reference': reference_data
+            }, status=status.HTTP_200_OK)
+        return Response({'match': False, 'username': '', 'reference': None}, status=status.HTTP_404_NOT_FOUND)
        
