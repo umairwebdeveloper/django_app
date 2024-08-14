@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
-
+from django.utils.timesince import timesince
 from .snippets import generate_presigned_url
 from .models import (
     Reference,
@@ -16,7 +16,7 @@ from django.utils.html import format_html
 
 
 class DataAdmin(admin.ModelAdmin):
-    list_display = ["get_shop", "file", "download_link", "created_on"]
+    list_display = ["get_shop", "file", "download_link", "created_on", "time_since_creation"]
     
     def get_shop(self, obj):
         if obj.model_name == "test_insole":
@@ -37,6 +37,13 @@ class DataAdmin(admin.ModelAdmin):
         return "-"
 
     download_link.short_description = "Download Link"
+    
+    def time_since_creation(self, obj):
+        if obj.created_on:
+            return timesince(obj.created_on)
+        return "-"
+
+    time_since_creation.short_description = "Time Since Creation"
 
 
 
