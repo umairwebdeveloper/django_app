@@ -16,9 +16,16 @@ from django.utils.html import format_html
 
 
 class DataAdmin(admin.ModelAdmin):
-    list_display = ["shop", "file", "download_link", "created_on"]
+    list_display = ["get_shop", "file", "download_link", "created_on"]
+    
+    def get_shop(self, obj):
+        if obj.model_name == "test_insole":
+            return "Test Insole"
+        return obj.shop.shopOwner.username if obj.shop and obj.shop.shopOwner else obj.shop.id if obj.shop else "-"
 
-    def download_link(self, obj):
+    get_shop.short_description = "Shop"
+    
+    def download_link(self, obj):   
         if obj.file:
             file_key = settings.AWS_PRIVATE_MEDIA_LOCATION + "/" + obj.file.name
             presigned_url = generate_presigned_url(

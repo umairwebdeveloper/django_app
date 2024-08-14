@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from foot_app.views import calculation, calculation_ar, calculation_only_measurements
+from foot_app.insole.views import CalculateCloudPointView
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.authtoken.views import obtain_auth_token
@@ -21,7 +22,8 @@ urlpatterns = [
     # path("apiadvice/", views.apiadvice, name="apiadvice"),
     path("calculation/", calculation, name="calculation"),
     path("calculation-only-measurements/", calculation_only_measurements, name="calculation_measurements"),
-    path("calculation-ar/", calculation_ar, name="calculation_ar"),
+    path("calculation-ar/", calculation_ar, name="calculation_ar"), 
+    path('calculate_cloud_point/', CalculateCloudPointView.as_view(), name='calculate_cloud_point'),
     path("hello/", views.HelloView.as_view(), name="hello"),
     path("auth_token", obtain_auth_token, name="api_token_auth"),
     path("test-image", views.test_image, name="test-image"),
