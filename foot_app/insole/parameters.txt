@@ -1,0 +1,5 @@
+ply_file_path= E:\\shoefitr photoshop\\shoefitr-nextjs\\backend\\django_app\\frame_0995.ply
+blender_exe_file_path= C:\\Program Files\\Blender Foundation\\Blender 4.2\\blender.exe
+output_file_path= E:\\shoefitr photoshop\\shoefitr-nextjs\\backend\\django_app\\finished_frame_0995.stl
+smooth_iterations= 1
+Foot_type= Left

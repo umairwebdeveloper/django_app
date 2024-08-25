@@ -70,6 +70,8 @@ def iframe_page(request):
     allowed_domains = user.allowed_domains + [
         "admin.shoefitr.io",
         "staging.admin.shoefitr.io",
+        "testscan.shoefitr.io",
+        "portal.shoefitr.io",
     ]
     if req_domain not in allowed_domains:
         # data = {

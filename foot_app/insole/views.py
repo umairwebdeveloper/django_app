@@ -70,3 +70,4 @@ class CalculateCloudPointView(APIView):
         except Exception as e:
             # Catch any other unforeseen errors
             return Response({"error": "An unexpected error occurred. Please try again later."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
