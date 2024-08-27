@@ -86,7 +86,7 @@ def iframe_page(request):
         response["Content-Security-Policy"] = "frame-ancestors 'none'"
         response["X-Frame-Options"] = "DENY"
         return response
-    new_url = f"https://testscan.shoefitr.io/scan?shopid={username}&userid=12345&modelname={modelname}"
+    new_url = f"https://api.shoefitr.io/scan?shopid={username}&userid=12345&modelname={modelname}"
     return redirect(new_url)
 
 
