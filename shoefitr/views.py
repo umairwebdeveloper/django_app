@@ -43,21 +43,17 @@ def iframe_page(request):
     token = request.GET.get("token")
     unb64 = request.GET.get("unb64")
     modelname = request.GET.get("modelname")
-    token = token.replace(" ", "+")
-    print(22, token, unb64)
+    if token:
+        token = token.replace(" ", "+")
     if not token or not unb64:
         return JsonResponse({"message": "Please provide token and uidb64"}, status=403)
     username = force_str(urlsafe_base64_decode(unb64))
-    print(23, username)
     user = User.objects.filter(username=username).first()
-    print(34, user)
     if not user:
         return JsonResponse({"message": "Token is invalid"}, status=403)
     if not gui_button_token.check_token(user, token):
-        print(55, "not verified")
         raise AuthenticationFailed("The link is invalid or expired")
     host_url = request.META.get("HTTP_REFERER")
-    print(345, host_url)
     if not host_url:
         return JsonResponse(
             {
@@ -66,12 +62,12 @@ def iframe_page(request):
             status=403,
         )
     req_domain = urlparse(host_url).netloc.replace("www.", "")
-    print(333333, req_domain)
     allowed_domains = user.allowed_domains + [
         "admin.shoefitr.io",
         "staging.admin.shoefitr.io",
         "testscan.shoefitr.io",
         "portal.shoefitr.io",
+        "127.0.0.1:8000",
     ]
     if req_domain not in allowed_domains:
         # data = {
@@ -81,7 +77,6 @@ def iframe_page(request):
         #     "html": True,
         # }
         # Util.send_email(data)
-        print(403, "Not allowed_domains", allowed_domains)
         response = JsonResponse(
             {
                 "message": "This domain is not registered to shoefitr for your shop, please contact charles@shoefitr.io"
@@ -91,12 +86,8 @@ def iframe_page(request):
         response["Content-Security-Policy"] = "frame-ancestors 'none'"
         response["X-Frame-Options"] = "DENY"
         return response
-    context = {"shopid": username, "userid": "12345", "modelname": modelname}
-    response = render(request, "gui.html", context)
-    response["Content-Security-Policy"] = f"frame-ancestors {host_url}"
-    response["X-Frame-Options"] = f"ALLOW-FROM {host_url}"
-
-    return response
+    new_url = f"https://testscan.shoefitr.io/scan?shopid={username}&userid=12345&modelname={modelname}"
+    return redirect(new_url)
 
 
 class HelloView(APIView):
