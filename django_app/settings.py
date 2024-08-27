@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     "utils",
     "models",
 ]
-AppConfig.default = False
+# AppConfig.default = False
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
