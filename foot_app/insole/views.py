@@ -1,14 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from io import BytesIO
-from PIL import Image
-import open3d as o3d
-from .depth_to_surface import calculate_cloud_point_from_pic
-from shoefitr.models import data
-from django.core.files.base import ContentFile
+# from io import BytesIO
+# from PIL import Image
+# import open3d as o3d
+# from .depth_to_surface import calculate_cloud_point_from_pic
+# from shoefitr.models import data
+# from django.core.files.base import ContentFile
 from rest_framework import status
-import tempfile
-import os
+# import tempfile
+# import os
 
 # class CalculateCloudPointView(APIView):
     
@@ -70,7 +70,6 @@ import os
 #         except Exception as e:
 #             # Catch any other unforeseen errors
 #             return Response({"error": "An unexpected error occurred. Please try again later."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
 
 
 
