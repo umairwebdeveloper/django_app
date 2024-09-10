@@ -67,6 +67,7 @@ def iframe_page(request):
         "staging.admin.shoefitr.io",
         "testscan.shoefitr.io",
         "portal.shoefitr.io",
+        "w3schools.com",
         "127.0.0.1:8000",
     ]
     if req_domain not in allowed_domains:
@@ -87,8 +88,10 @@ def iframe_page(request):
         response["X-Frame-Options"] = "DENY"
         return response
     new_url = f"https://api.shoefitr.io/scan?shopid={username}&userid=12345&modelname={modelname}"
-    return redirect(new_url)
-
+    response = HttpResponseRedirect(new_url)
+    response["Content-Security-Policy"] = f"frame-ancestors {host_url}"
+    response["X-Frame-Options"] = f"ALLOW-FROM {host_url}"
+    return response
 
 class HelloView(APIView):
     permission_classes = [IsAuthenticated]
