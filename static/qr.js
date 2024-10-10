@@ -17,10 +17,11 @@
  * [Support AMD, CMD, CommonJS/Node.js]
  *
  */
-(function () {
-	// å¯ç”¨ä¸¥æ ¼æ¨¡å¼
-	"use strict";
 
+// å¯ç”¨ä¸¥æ ¼æ¨¡å¼
+// "use strict";
+
+document.addEventListener("DOMContentLoaded", function () {
 	// è‡ªå®šä¹‰å±€éƒ¨ undefined å˜é‡
 	var undefined;
 
@@ -2595,8 +2596,7 @@
 		// Export Global
 		root.QRCode = QRCode;
 	}
-}).call(this);
-(function () {
+
 	// Scoping function to avoid globals
 	var isMobile =
 		/(Mobile|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini)/i.test(
@@ -2630,4 +2630,4 @@
 			button.style.display = "none";
 		});
 	}
-})();
+});
