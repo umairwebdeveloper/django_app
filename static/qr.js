@@ -7,14 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 
 	// Function to display QR code and text for non-mobile devices
-	const displayQRCode = (qrCode, text) => {
-		if (qrCode && text) {
+	const displayQRCode = (qrCode, text, qrText) => {
+		if (qrCode && text && qrText) {
 			text.style.display = "block";
 			text.style.marginBottom = "1rem";
 			qrCode.style.display = "block";
 
 			const qrData = {
-				text: "https://cssscript.com",
+				text: qrText, // Use the iframe src as the QR code text
 				size: "250x250",
 				color: "3865f3",
 			};
@@ -53,12 +53,17 @@ document.addEventListener("DOMContentLoaded", function () {
 		const qrCode = document.getElementById("qr-code");
 		const shoefitrWeb = document.getElementById("shoefitr-web");
 
+		// Get the src of the iframe to use as the QR code text
+		const qrText = shoefitrWeb
+			? shoefitrWeb.src
+			: "https://api.shoefitr.io/test";
+
 		// Initially hide elements
 		hideElements([button, text, qrCode]);
 
 		// Display appropriate content based on device type
 		if (!isMobile) {
-			displayQRCode(qrCode, text);
+			displayQRCode(qrCode, text, qrText);
 		} else {
 			handleMobile(button, shoefitrWeb);
 		}
