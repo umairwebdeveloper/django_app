@@ -41,6 +41,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	};
 
+	function urlSafeBase64Decode(base64) {
+		base64 = base64.replace(/-/g, "+").replace(/_/g, "/").replace(/=/g, "");
+		while (base64.length % 4 !== 0) {
+			base64 += "=";
+		}
+		return atob(base64);
+	}
+
 	// Main logic
 	(function () {
 		const isMobile =
@@ -54,9 +62,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		const shoefitrWeb = document.getElementById("shoefitr-web");
 
 		// Get the src of the iframe to use as the QR code text
-		const qrText = shoefitrWeb
-			? shoefitrWeb.src
-			: "https://api.shoefitr.io/test";
+		const url = shoefitrWeb.src;
+		const urlParams = new URLSearchParams(url.split("?")[1]);
+		const unb64Encoded = urlParams.get("unb64");
+		let decodedString;
+		let qrText;
+
+		try {
+			decodedString = urlSafeBase64Decode(unb64Encoded);
+			qrText = `https://api.shoefitr.io/scan?shopid=${decodedString}&userid=12345&modelname=*`;
+		} catch (error) {
+			qrText = `https://api.shoefitr.io/test`;
+		}
 
 		// Initially hide elements
 		hideElements([button, text, qrCode]);
