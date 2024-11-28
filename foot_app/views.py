@@ -20,6 +20,7 @@ from .snippets import detect_fun
 
 ACCEPTABLE_FEET_DIFFERENCE = 17  # in mm
 
+ACCEPTABLE_SIZE_DIFFERENCE_MARGIN = 0.39 # inches or 10 mm
 
 @csrf_exempt
 def calculation(request):
@@ -32,11 +33,12 @@ def calculation(request):
         selection = request.POST.get("selection", None)
         region = request.POST.get("system", None)
         test_scan = request.POST.get("test_scan", None)
+        height = request.POST.get("height", None)
         picture_file = request.FILES.get("picture", None)
         img = cv2.imdecode(
             np.frombuffer(picture_file.read(), np.uint8), cv2.IMREAD_UNCHANGED
         )
-
+        
         # now = datetime.now()
         # time = now.strftime("%d_%m_%Y %H_%M_%S")
         # try:
@@ -58,7 +60,17 @@ def calculation(request):
         size_data, found, message, arrowed_image = detect_fun(img, len_size)
 
         # message, size_data, img_data, found = magic(img, size, system, adult)
-        print(8889, message, size_data, found)
+        if height:
+            height = int(height) 
+            foot_length_from_height = height / 6.67
+            foot_length_from_height = foot_length_from_height / 2.54
+            if foot_length_from_height - ACCEPTABLE_SIZE_DIFFERENCE_MARGIN <= len_size <= foot_length_from_height + ACCEPTABLE_SIZE_DIFFERENCE_MARGIN:
+                size_acceptable = True
+            else:
+                size_acceptable = False
+                
+            if not size_acceptable:
+                return JsonResponse({"size_not_acc": True, "message": "Your input size appears to be wrong, please correct!"})
 
         # find_coordinates = False
         # if find_coordinates:
