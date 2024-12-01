@@ -60,17 +60,16 @@ def calculation(request):
         size_data, found, message, arrowed_image = detect_fun(img, len_size)
 
         # message, size_data, img_data, found = magic(img, size, system, adult)
+        size_not_acc = False
+        
         if height:
             height = int(height) 
             foot_length_from_height = height / 6.67
             foot_length_from_height = foot_length_from_height / 2.54
             if foot_length_from_height - ACCEPTABLE_SIZE_DIFFERENCE_MARGIN <= len_size <= foot_length_from_height + ACCEPTABLE_SIZE_DIFFERENCE_MARGIN:
-                size_acceptable = True
+                size_not_acc = False
             else:
-                size_acceptable = False
-                
-            if not size_acceptable:
-                return JsonResponse({"size_not_acc": True, "message": "Your input size appears to be wrong, please correct!"})
+                size_not_acc = True
 
         # find_coordinates = False
         # if find_coordinates:
@@ -185,6 +184,7 @@ def calculation(request):
                 "size": size,
                 "correct_size": correct_size,
                 "message": message,
+                "size_not_acc": size_not_acc
             }
             response_data.update(size_data)
             print(22223, "saved to db")
@@ -202,6 +202,7 @@ def calculation(request):
                 "size": size,
                 "correct_size": correct_size,
                 "message": message,
+                "size_not_acc": size_not_acc
             }
             print(32323, "Errrorr", message)
             
