@@ -216,6 +216,7 @@ class margin(models.Model):
 class Reference(models.Model):
     size = models.CharField(max_length=10, null=True, default=None)
     selection = models.CharField(max_length=50, null=True, default=None)
+    height = models.CharField(max_length=50, null=True, default=None)
     region = models.CharField(max_length=50, null=True, default=None)
     created_on = models.DateTimeField(auto_now_add=True, null=True)
     updated_on = models.DateTimeField(auto_now=True, null=True)

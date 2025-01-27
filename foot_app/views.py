@@ -165,6 +165,7 @@ def calculation(request):
                         model_name,
                         size,
                         selection,
+                        str(height),
                         region,
                         arrowed_image,
                         None,
@@ -217,6 +218,7 @@ def calculation_only_measurements(request):
         userid = request.POST.get("userid", None)
         size = round(float(request.POST.get("size", 0)), 2)
         selection = request.POST.get("selection", None)
+        height = request.POST.get("height", None)
         region = request.POST.get("system", None)
         picture_file = request.FILES.get("picture", None)
         img = cv2.imdecode(
@@ -319,6 +321,7 @@ def calculation_only_measurements(request):
                     '_',
                     size,
                     selection,
+                    height,
                     region,
                     arrowed_image,
                     None,
@@ -539,6 +542,7 @@ def calculation_ar(request):
                     width_advice,
                     ball_advice,
                     instep_advice,
+                    '_',
                     model_name,
                     arrowed_image,
                     None,

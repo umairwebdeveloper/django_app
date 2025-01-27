@@ -1447,6 +1447,7 @@ def save_to_db(
     model_name,
     size_reference,
     selection,
+    height,
     region,
     picture,
     shoespair,
@@ -1460,7 +1461,7 @@ def save_to_db(
     _, frame_jpg = cv2.imencode(".jpg", picture)
     file = ContentFile(frame_jpg)
     try:
-        reference = Reference(size=str(size_reference), region=region, selection=selection)
+        reference = Reference(size=str(size_reference), region=region, selection=selection, height=height)
         reference.save()
         shop = Shop.objects.filter(shopOwner=user_found).first()
         if not shop:
